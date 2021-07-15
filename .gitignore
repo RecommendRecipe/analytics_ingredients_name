@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 # add conf
 /work/data
+.DS_Store
