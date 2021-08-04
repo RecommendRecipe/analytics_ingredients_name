@@ -12,7 +12,7 @@ url = base_url + "/category/"
 session = requests.session()
 session.get(base_url)
 data = session.get(url)
-data = BeautifulSoup(data.content)
+data = BeautifulSoup(data.content,"html.parser")
 
 top_link = data.find_all("a",class_="category_top-list__link")
 small_list_link = data.find_all("a",class_="category_top-smallList__link")
@@ -28,14 +28,14 @@ pack = "?s=0"
 for menu in tqdm(url_list,total=len(url_list)):
   # 初めのindexページの処理
   url = base_url + menu + pack
-  data = BeautifulSoup(session.get(url).content)
+  data = BeautifulSoup(session.get(url).content,"html.parser")
   tmp_lists = [tmp.get("href") for tmp in data.find_all("a",class_="recipe_ranking__link")]
   recipe_url_lists += tmp_lists
   
   # 次のページ内のurlを取得
   page_num += 1
   next_url = base_url + menu + str(page_num) + "/" + pack
-  data = BeautifulSoup(session.get(next_url).content)
+  data = BeautifulSoup(session.get(next_url).content,"html.parser")
   cap_john = data.find_all("a",class_="recipe_ranking__link")
   
   exist = True
@@ -47,7 +47,7 @@ for menu in tqdm(url_list,total=len(url_list)):
     # 次のページ内のurlの取得
     page_num += 1
     next_url = base_url + menu + str(page_num) + "/" + pack
-    data = BeautifulSoup(session.get(next_url).content)
+    data = BeautifulSoup(session.get(next_url).content,"html.parser")
     cap_john = data.find_all("a",class_="recipe_ranking__link")
     if len(cap_john) == 0 :
       exist = False
