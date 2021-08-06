@@ -2,14 +2,14 @@ from gensim.models import KeyedVectors
 import pandas as pd
 import MeCab
 
-recipe_wv = KeyedVectors.load_word2vec_format('../data/recipe_step.vec.pt', binary=True)
+recipe_wv = KeyedVectors.load_word2vec_format('../data/recipe_step15.vec.pt', binary=True)
 
 from tqdm import tqdm as progress
 
 m = MeCab.Tagger("-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd")
 # カナに統一した変換表の読み込み
 exchange_kana = pd.read_csv("../data/exchanged_map.csv",encoding='utf-8')
-uncorrect_ingredients_data = pd.read_csv("../data/analytics_data.csv",encoding='utf-8')
+uncorrect_ingredients_data = pd.read_csv("../data/unmatch_ingredients.csv",encoding='utf-8')
 uncorrect_ingredients_data = uncorrect_ingredients_data[["id","name","kana_name"]]
 
 def simi_search(word,exchange_kana,wv,m):
@@ -47,4 +47,4 @@ def simi_search(word,exchange_kana,wv,m):
 progress.pandas()
 
 uncorrect_ingredients_data["exchange_kana_name"] = uncorrect_ingredients_data["name"].progress_apply(simi_search, exchange_kana=exchange_kana, wv=recipe_wv, m=m)
-uncorrect_ingredients_data.to_csv("../data/fixed_analytics_data_5.csv",encoding='utf-8')
+uncorrect_ingredients_data.to_csv("../data/fixed_analytics_data_10.csv",encoding='utf-8')
