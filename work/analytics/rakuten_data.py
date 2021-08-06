@@ -1,4 +1,3 @@
-from requests.api import get
 from tqdm import tqdm as tq
 from bs4 import BeautifulSoup
 import requests
