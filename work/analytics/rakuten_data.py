@@ -1,6 +1,8 @@
-from tqdm.notebook import tqdm_notebook as tq
+from requests.api import get
+from tqdm import tqdm as tq
 from bs4 import BeautifulSoup
 import requests
+import json
 
 f = open('../data/sep_scry_data/rakuten-url1.txt', 'r')
 data = f.read()
@@ -8,35 +10,29 @@ recipe_url_list = data.split(",")
 recipe_list = []
 base_url = "https://recipe.rakuten.co.jp"
 
+def get_para(content):
+  if content == None:
+    return ""
+  else:
+    return content.text
+
 for menu in tq(recipe_url_list,total=len(recipe_url_list)):
   recipe = {}
   url = base_url + menu
   data = BeautifulSoup(requests.get(url).content,"html.parser")
   
-  recipe["title"] = data.find("h1",class_="page_title__text").text
+  recipe["title"] = get_para(data.find("h1",class_="page_title__text"))
   # 所要時間
-  tmp = data.find("li",class_="recipe_info__time")
-  if tmp != None:
-    recipe["time"] = tmp.text
-  else:
-    recipe["time"] = ""
+  recipe["time"] = get_para(data.find("li",class_="recipe_info__time"))
   # 予算
-  tmp = data.find("li",class_="recipe_info__cost")
-  if tmp != None:
-    recipe["cost"] = tmp.text
-  else:
-    recipe["cost"] = ""
-  recipe["comment"] = data.find("div",class_="recipe_info_user__comment").text
-  recipe["serving_for"] = data.find("h2",class_="contents_title_mb").text
+  recipe["cost"] = get_para(data.find("li",class_="recipe_info__cost"))
+  recipe["comment"] = get_para(data.find("div",class_="recipe_info_user__comment"))
+  recipe["serving_for"] = get_para(data.find("h2",class_="contents_title_mb"))
   recipe["ingredients"] = [{"name":ingre.find("span",class_="recipe_material__item_name").text,"amount":ingre.find("span",class_="recipe_material__item_serving").text} for ingre in data.find_all("li",class_="recipe_material__item")]
   recipe["step"] = [ step.text for step in data.find_all("span",class_="recipe_howto__text")]
-  recipe["sub_comment"] = data.find("p",class_="recipe_note__trigger_text").text
+  recipe["sub_comment"] = get_para(data.find("p",class_="recipe_note__trigger_text"))
   # 料理のコツ
-  tmp = data.find("p",class_="recipe_note__tips_text")
-  if tmp != None:
-    recipe["hint"] = tmp.text
-  else:
-    recipe["hint"] = ""
+  recipe["hint"] = get_para(data.find("p",class_="recipe_note__tips_text"))
   recipe["id"] = data.find("li",class_="recipe_note__id").text[6:]
   # カテゴリと料理タイプ
   tmp = data.find_all("dd",class_="relation_info__item")
@@ -51,4 +47,7 @@ for menu in tq(recipe_url_list,total=len(recipe_url_list)):
 
   recipe_list.append(recipe)
 
-print(len(recipe_list))
+output_data = json.dumps(recipe_list,ensure_ascii=False,indent=2)
+output = open("../data/sep_scry_data/output_rakuten_1.json",'w',encoding='utf-8')
+output.write(output_data)
+output.close()
