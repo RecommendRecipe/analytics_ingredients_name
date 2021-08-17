@@ -5,12 +5,14 @@ import pandas as pd
 import MeCab
 from tqdm import tqdm as progress
 
+print("データの読み込みを開始します")
 # 食材名データの読み込み
 data = pd.read_csv("../data/recommend_ingredients.csv",names=["id","name","quantity"])
 # 変換表の読み込み
 exchange = pd.read_csv("../data/exchange_before.csv",names=["id","name","plus","unit","g"])
 # カナに統一した変換表の読み込み
 exchange_kana = pd.read_csv("../data/exchanged_map.csv")
+print("データの読み込みが完了しました")
 
 # 必要な情報のみ抽出
 exchange_kana = exchange_kana[["id","name"]]
@@ -56,8 +58,9 @@ def pick_ingredients(words,m):
 # 進捗を確認
 progress.pandas()
 # 関数を適応
+print("分ち書きを開始します")
 data['kana_name'] = data['name'].progress_apply(pick_ingredients,m=m)
-
+print("分ち書きが終了しました")
 """
 変換表からカナに変換した食材名
 を検索、その結果を返す。
@@ -98,9 +101,10 @@ def exchange_map_ingre(ingredients,exchange_map):
 
   return ';'.join(map(str,ingre["id"].tolist()))
 
-
+print("食材名の抽出を開始します")
 # 関数の適応
 data['fix_kana_name'] = data['kana_name'].progress_apply(exchange_map_ingre, exchange_map=exchange_kana)
+print("食材名の抽出が終了しました")
 
 def fix_name(ingredients,exchange):
   if ingredients == None:
@@ -121,5 +125,8 @@ def fix_name(ingredients,exchange):
     ingre = exchange[exchange["id"] == int(ingredients)]
     ingre = ingre[~ingre.duplicated(subset='name')]
   return ";".join(ingre["name"].tolist())
+
+print("idから食材名に変換します")
 data['fixed_name'] = data['fix_kana_name'].progress_apply(fix_name, exchange=exchange)
+print("データを保存しています.")
 data.to_csv("../data/analytics_data.csv")

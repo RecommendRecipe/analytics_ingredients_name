@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import json
 
-f = open('./sep_scry_data/rakuten-url2.txt', 'r')
+f = open('../data/sep_scry_data/rakuten-url10.txt', 'r')
 data = f.read()
 recipe_url_list = data.split(",")
 recipe_list = []
@@ -49,6 +49,6 @@ for menu in tq(recipe_url_list,total=len(recipe_url_list)):
     print(e)
 
 output_data = json.dumps(recipe_list,ensure_ascii=False,indent=2)
-output = open("./sep_scry_data/output_rakuten_2.json",'w',encoding='utf-8')
+output = open("../data/sep_scry_data/output_rakuten_10.json",'w',encoding='utf-8')
 output.write(output_data)
 output.close()
