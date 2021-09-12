@@ -15,6 +15,10 @@ RUN apt-get install -y build-essential \
 RUN git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git
 RUN mecab-ipadic-neologd/bin/install-mecab-ipadic-neologd -y
 
+# gloveのインストール
+RUN git clone https://github.com/stanfordnlp/glove
+RUN cd glove && make
+
 # Pythonの必要なライブラリのインストールZOY
 COPY ./requirements.txt $PWD
 RUN pip install -r requirements.txt
