@@ -3,7 +3,7 @@ import pandas as pd
 import MeCab
 
 # 学習データの読み込み
-recipe_wv = KeyedVectors.load_word2vec_format('../data//trained_data/GloVe/input_glove_vector_5_600.vec.pt', binary=False)
+recipe_wv = KeyedVectors.load_word2vec_format('../data/trained/cookpad_m1_v400_min5_w1_e5.vec.pt', binary=True)
 
 from tqdm import tqdm as progress
 
@@ -13,7 +13,7 @@ exchange_kana = pd.read_csv("../data/exchanged_map.csv",encoding='utf-8')
 uncorrect_ingredients_data = pd.read_csv("../data/exchange_data/step3_in.csv",encoding='utf-8')
 uncorrect_ingredients_data = uncorrect_ingredients_data[["id","name"]]
 
-#uncorrect_ingredients_data = uncorrect_ingredients_data.head(50)
+uncorrect_ingredients_data = uncorrect_ingredients_data.head(1000)
 
 def simi_search(word,exchange_kana,wv,m):
   
@@ -22,7 +22,7 @@ def simi_search(word,exchange_kana,wv,m):
     ingre_list = wv.most_similar(positive=[word])
   except KeyError:
     # 検索できない場合は"keyerror"を返す
-    return 'keyerror'
+    return pd.Series(["keyerror",99])
   
   for index,tmp in enumerate(ingre_list):
     tmp_ingre_name = m.parseToNode(tmp[0])
@@ -46,14 +46,13 @@ def simi_search(word,exchange_kana,wv,m):
     else:
       #とりあえず一個見つかったら食材名が決定ZOY
       ingre = ingre[~ingre.duplicated(subset='name')]
-      ingre["name"] += " " + str(index)
-      return ';'.join(map(str,ingre["name"].tolist()))
+      return pd.Series([';'.join(map(str,ingre["name"].tolist())),index])
 
   #for文の終了
-  return "empty"
+  return pd.Series(["empty",99])
 
 # 進捗を確認
 progress.pandas()
 
-uncorrect_ingredients_data["result"] = uncorrect_ingredients_data["name"].progress_apply(simi_search, exchange_kana=exchange_kana, wv=recipe_wv, m=m)
-uncorrect_ingredients_data.to_csv("../data/exchange_data/step3_glove.csv",encoding='utf-8')
+uncorrect_ingredients_data[["result","rank"]] = uncorrect_ingredients_data["name"].progress_apply(simi_search, exchange_kana=exchange_kana, wv=recipe_wv, m=m)
+uncorrect_ingredients_data.to_csv("../data/exchange_data/step3_w2v_w1.csv",encoding='utf-8')
