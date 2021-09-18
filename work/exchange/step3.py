@@ -3,7 +3,7 @@ import pandas as pd
 import MeCab
 
 # 学習データの読み込み
-recipe_wv = KeyedVectors.load_word2vec_format('../data/rakuten_1_9_600_5.vec.pt', binary=True)
+recipe_wv = KeyedVectors.load_word2vec_format('../data//trained_data/GloVe/input_glove_vector_5_600.vec.pt', binary=False)
 
 from tqdm import tqdm as progress
 
@@ -56,4 +56,4 @@ def simi_search(word,exchange_kana,wv,m):
 progress.pandas()
 
 uncorrect_ingredients_data["result"] = uncorrect_ingredients_data["name"].progress_apply(simi_search, exchange_kana=exchange_kana, wv=recipe_wv, m=m)
-uncorrect_ingredients_data.to_csv("../data/exchange_data/step3.csv",encoding='utf-8')
+uncorrect_ingredients_data.to_csv("../data/exchange_data/step3_glove.csv",encoding='utf-8')
