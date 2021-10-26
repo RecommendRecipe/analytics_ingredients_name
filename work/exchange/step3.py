@@ -3,7 +3,7 @@ import pandas as pd
 import MeCab
 
 # 学習データの読み込み
-recipe_wv = KeyedVectors.load_word2vec_format('../data/trained/cookpad_m1_v400_min5_w1_e5.vec.pt', binary=True)
+recipe_wv = KeyedVectors.load_word2vec_format('../data/trained_data/cookpad_m1_v500_min5_w4.vec.pt', binary=True)
 
 from tqdm import tqdm as progress
 
@@ -13,7 +13,7 @@ exchange_kana = pd.read_csv("../data/exchanged_map.csv",encoding='utf-8')
 uncorrect_ingredients_data = pd.read_csv("../data/exchange_data/step3_in.csv",encoding='utf-8')
 uncorrect_ingredients_data = uncorrect_ingredients_data[["id","name"]]
 
-uncorrect_ingredients_data = uncorrect_ingredients_data.head(1000)
+#uncorrect_ingredients_data = uncorrect_ingredients_data.head(1000)
 
 def simi_search(word,exchange_kana,wv,m):
   
@@ -55,4 +55,4 @@ def simi_search(word,exchange_kana,wv,m):
 progress.pandas()
 
 uncorrect_ingredients_data[["result","rank"]] = uncorrect_ingredients_data["name"].progress_apply(simi_search, exchange_kana=exchange_kana, wv=recipe_wv, m=m)
-uncorrect_ingredients_data.to_csv("../data/exchange_data/step3_w2v_w1.csv",encoding='utf-8')
+uncorrect_ingredients_data.to_csv("../data/exchange_data/step3_w2v_result.csv",encoding='utf-8')

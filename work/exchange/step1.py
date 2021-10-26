@@ -5,8 +5,9 @@ import MeCab
 # 食材名データの読み込み
 data = pd.read_csv("../data/recommend_ingredients.csv", names=["id","name","quantity"])
 # 欠損値の処理
+print(len(data))
 data = data.dropna(how='any')
-
+print("欠損値除外後",len(data))
 # 変換表の読み込み
 exchange = pd.read_csv("../data/exchange_before.csv",names=["id","name","plus","unit","g"])
 # カナに統一した変換表の読み込み

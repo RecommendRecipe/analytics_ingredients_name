@@ -71,9 +71,9 @@ for act_url in tq(sex_act_urls,total=len(sex_act_urls)):
       # 取得したurlを追加
       sex_video_url += urls
       i += 1
-
-file = open("../data/dmm_url.txt",mode='w',encoding='utf-8')
-file.write(",".join(sex_video_url))
+output = list(set(sex_video_url))
+file = open("../data/url_list/dmm_url.txt",mode='w',encoding='utf-8')
+file.write(",".join(output))
 file.close()
 
-print(len(sex_video_url))
+print(len(output))
