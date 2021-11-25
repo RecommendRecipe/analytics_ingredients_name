@@ -16,4 +16,8 @@ for video in pre_video:
     video["review"] = tmp
     clean_video.append(video)
 
-print(clean_video[0])
+output_data = json.dumps(clean_video,ensure_ascii=False,indent=2)
+
+with open("../data/scrdata/clean_adult_video.json", "w") as f:
+    f.write(output_data)
+print("前処理が終了いたしました。")
