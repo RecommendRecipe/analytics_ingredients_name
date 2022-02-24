@@ -128,5 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 # add conf
-/work/data
+/fix_name/work/data
+/fix_amount/work/analytics/data
+/fix_amount/work/dic_install
 .DS_Store
