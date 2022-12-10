@@ -4,10 +4,6 @@ services:
     image: mecab-base-notebook
     container_name: "exchange_ingredients"
     build: .
-    # ポートの設定("ホスト：コンテナ")
-    ports:
-    # 4545だと自分のローカルと被るために1919にしました。
-      - "5000:8888"
     # ボリューム(データの永続化の場所)の設定(ホスト:コンテナ)
     # ホスト内のworkディレクトリとコンテナ内の/home/joyyan/workディレクトリが紐づいているイメージ
     # どうして/home/jovyan/workにマウントしてるかは元のイメージ(base-notebook)作ったやつに聞け

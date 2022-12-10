@@ -5,3 +5,4 @@ gensim
 python-Levenshtein
 beautifulsoup4
 pyclustering
+openpyxl

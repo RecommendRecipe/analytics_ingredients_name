@@ -3,7 +3,7 @@ import pandas as pd
 import MeCab
 
 # 食材名データの読み込み
-data = pd.read_csv("../data/exchange_data/step2_in.csv")
+data = pd.read_csv("../data/exchange_data/step2_rakuten_in.csv")
 # 変換表の読み込み
 exchange = pd.read_csv("../data/exchange_before.csv",names=["id","name","plus","unit","g"])
 # カナに統一した変換表の読み込み
@@ -38,7 +38,8 @@ def pick_ingredients(words,m):
         try:
           tmp_ingredients.append(node[7])
         except IndexError: # 8番目の要素に読みがない場合
-          tmp_ingredients.append( "?" + parsed_text.surface)
+          tmp_ingredients.append( "?" + parsed_text.
+          surface)
       else:
         # 名詞以外は無視
         pass
@@ -126,4 +127,4 @@ def fix_name(ingredients,exchange):
 
 data['result'] = data['tmp_id'].progress_apply(fix_name, exchange=exchange)
 data = data[["id","name","result","quantity"]]
-data.to_csv("../data/exchange_data/step2.csv")
+data.to_csv("../data/exchange_data/step2_rakuten.csv")

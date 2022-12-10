@@ -3,7 +3,7 @@ import pandas as pd
 import MeCab
 
 # 食材名データの読み込み
-data = pd.read_csv("../data/fixed_recommend_ingredients.csv", dtype="str")
+data = pd.read_csv("../data/cookpad_ingredients.csv", names=["id","name","quantity"],dtype="str")
 # 欠損値の処理
 print(len(data))
 data = data.dropna(how='any')
@@ -106,4 +106,4 @@ def exchange_map_ingre(ingredients,exchange):
 # 関数の適応
 data['result'] = data['tmp_wakati'].progress_apply(exchange_map_ingre, exchange=exchange)
 data = data[["id","result","quantity","name"]]
-data.to_csv("../data/exchange_data/step1.csv")
+data.to_csv("../data/exchange_data/step1_cookpad.csv")

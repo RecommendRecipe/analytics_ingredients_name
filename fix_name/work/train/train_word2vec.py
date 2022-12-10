@@ -1,7 +1,7 @@
 from gensim.models import word2vec
 import logging
 
-sentences = word2vec.Text8Corpus('../data/train_data/recipe_train.txt')
+sentences = word2vec.Text8Corpus('../data/train_data/new_train_data.txt')
 
 loss_file = open("./compute_loss.csv", 'w')
 

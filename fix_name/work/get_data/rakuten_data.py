@@ -1,13 +1,16 @@
+from distutils.log import error
 from tqdm import tqdm as tq
 from bs4 import BeautifulSoup
 import requests
 import json
+import time
 
-f = open('../data/sep_scry_data/rakuten-url10.txt', 'r')
+f = open('../data/url_list/rakuten_url_untaken.txt', 'r')
 data = f.read()
 recipe_url_list = data.split(",")
 recipe_list = []
 base_url = "https://recipe.rakuten.co.jp"
+error = []
 
 def get_para(content):
   if content == None:
@@ -45,10 +48,13 @@ for menu in tq(recipe_url_list,total=len(recipe_url_list)):
       recipe["type"] = ""
 
     recipe_list.append(recipe)
-  except Exception as e:
-    print(e)
+  except requests.exceptions.ConnectionError:
+    error.append(url)
+    time.sleep(600)
+  except AttributeError:
+    error.append(url)
 
 output_data = json.dumps(recipe_list,ensure_ascii=False,indent=2)
-output = open("../data/sep_scry_data/output_rakuten_10.json",'w',encoding='utf-8')
+output = open("../data/train_data/rakuten_json/output_rakuten_12.json",'w',encoding='utf-8')
 output.write(output_data)
 output.close()

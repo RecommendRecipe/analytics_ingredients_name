@@ -4,8 +4,9 @@ cd dic_install/
 tar zxfv dic.tar.gz
 cd mecab-ipadic-2.7.0-20070801/
 # 標準だと文字コードがenc-jpなので変更
-nkf -w --overwrite *.csv
-nkf -w --overwrite *.def
+
+#nkf -w --overwrite *.csv
+#nkf -w --overwrite *.def
 # 文字コードを指定しないとファイルのコードを変えても意味ない
 # あと、dicrcの中でconfig-charset = UTF-8という風に書き換えないといけない
 ./configure --with-charset=utf8

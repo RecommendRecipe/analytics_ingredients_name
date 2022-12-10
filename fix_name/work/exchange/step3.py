@@ -8,7 +8,7 @@ import pandas as pd
 import MeCab
 
 # 食材名データの読み込み
-data = pd.read_csv("../data/exchange_data/step3_in.csv")
+data = pd.read_csv("../data/exchange_data/step3_rakuten_in.csv")
 # 変換表の読み込み
 exchange = pd.read_csv("../data/exchange_before.csv",names=["id","name","plus","unit","g"])
 # カナに統一した変換表の読み込み
@@ -92,4 +92,4 @@ def exchange_map_ingre(ingredients,exchange):
 # 関数の適応
 data['result'] = data['tmp_wakati'].progress_apply(exchange_map_ingre, exchange=correct_data)
 data = data[["id","name","result","quantity"]]
-data.to_csv("../data/exchange_data/step3.csv")
+data.to_csv("../data/exchange_data/step3_rakuten.csv")

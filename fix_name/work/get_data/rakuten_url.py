@@ -56,9 +56,22 @@ for menu in tqdm(url_list,total=len(url_list)):
         page_num = 1
     except:
       pass
-print(len(recipe_url_lists))
+
 recipe_url_lists = list(set(recipe_url_lists))
 print(len(recipe_url_lists))
-file = open("../data/rakuten_url.txt",mode='w',encoding='utf-8')
-file.write(",".join(recipe_url_lists))
-file.close()
+
+with open("../data/url_list/rakuten_url_tmp.txt","w") as f:
+  f.write(",".join(recipe_url_lists))
+
+
+# 既存のurlリストを参照
+"""
+with open("../data/url_list/rakuten_url.txt","r") as f:
+    old_list = f.read().split(',')
+print("取得済みのパス:",len(old_list))
+with open("../data/url_list/rakuten_url_untaken.txt","w") as f:
+    update_list = [url for url in recipe_url_lists if url not in old_list]
+    print("新規で見つかったパスの数:",len(update_list))
+    f.write(",".join(update_list))
+
+"""
