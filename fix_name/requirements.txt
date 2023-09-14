@@ -1,0 +1,8 @@
+pandas
+tqdm
+mecab-python3==0.7
+gensim
+python-Levenshtein
+beautifulsoup4
+pyclustering
+openpyxl
